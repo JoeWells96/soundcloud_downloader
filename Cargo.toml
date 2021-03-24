@@ -1,0 +1,16 @@
+[package]
+name = "soundcloud_downloader"
+version = "0.1.0"
+authors = ["Joe Wells <joe.wells@depop.com>"]
+edition = "2018"
+
+[dependencies]
+bytes = "1.0.1"
+
+[dependencies.reqwest]
+version = "0.11.2"
+features = ["blocking", "json"]
+
+[dependencies.serde]
+version = "1.0.59"
+features = ["derive"]
