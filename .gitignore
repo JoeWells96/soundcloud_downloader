@@ -1,4 +1,7 @@
 /target
 Cargo.lock
-*.mp3
+
 /.idea
+.DS_Store
+
+*.mp3
