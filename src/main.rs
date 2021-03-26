@@ -3,7 +3,6 @@ use std::fs::File;
 use std::io::Write;
 
 use bytes::Bytes;
-use m3u8_rs::playlist::Playlist;
 
 mod soundcloud;
 mod models;
@@ -19,14 +18,7 @@ fn main() {
         save_track_locally(raw_track, track_info.permalink).expect("Failed to save raw track");
     } else {
         let stream_url = track_info.get_stream_url().expect("No original download or mpeg stream available for track");
-        let m3u8_url = soundcloud::get_m3u8_link(stream_url).map(|r| r.url).unwrap();
-        let m3u8_bytes = soundcloud::get_bytes(m3u8_url).unwrap();
-        let parsed_m3u8 = m3u8_rs::parse_playlist_res(&m3u8_bytes[..]);
-        let file = File::create(format!("{}.mp3", track_info.permalink)).unwrap();
-        match parsed_m3u8 {
-            Ok(Playlist::MediaPlaylist(pl)) => m3u8::download_playlist(pl, &file),
-            _ => panic!()
-        }
+        download_hls_track(stream_url, track_info.permalink)
     }
 }
 
@@ -38,5 +30,11 @@ fn download_original_track(id: u64) -> reqwest::Result<Bytes> {
 fn save_track_locally(bytes: Bytes, name: String) -> std::io::Result<()> {
     let mut buffer = File::create(format!("{}.mp3", name))?;
     buffer.write_all(&bytes[..])
+}
+
+fn download_hls_track(url: String, name: String) {
+    let hls_url = soundcloud::get_hls_link(url).map(|r| r.url).unwrap();
+    let file = File::create(format!("{}.mp3", name)).unwrap();
+    m3u8::download_hls_stream_to_file(hls_url, &file);
 }
 

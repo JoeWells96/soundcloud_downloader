@@ -16,7 +16,7 @@ pub fn get_download_link(id: u64) -> reqwest::Result<DownloadTrackResponse> {
     response.json()
 }
 
-pub fn get_m3u8_link(url: String) -> reqwest::Result<DownloadStreamResponse> {
+pub fn get_hls_link(url: String) -> reqwest::Result<DownloadStreamResponse> {
     let auth_param: String = format!("?client_id={}", CLIENT_ID);
     let authenticated_url: String = format!("{}{}", url, auth_param);
     let response: Response = reqwest::blocking::get(authenticated_url)?;
