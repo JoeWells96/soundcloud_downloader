@@ -13,6 +13,11 @@ fn main() {
 
     let track_info = soundcloud::resolve_track_info(url).expect("Failed to resolve track info");
 
+    match track_info.purchase_url {
+        Some(ref x) => println!("Purchase here: {}", x),
+        None => {}
+    }
+
     if track_info.downloadable {
         let raw_track = download_original_track(track_info.id).expect("Failed to download raw track");
         save_track_locally(raw_track, track_info.permalink).expect("Failed to save raw track");

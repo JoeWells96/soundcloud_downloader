@@ -16,7 +16,8 @@ pub struct TrackInfo {
     pub id: u64,
     pub downloadable: bool,
     pub permalink: String,
-    media: Media,
+    pub purchase_url: Option<String>,
+    media: Media
 }
 
 impl TrackInfo {
